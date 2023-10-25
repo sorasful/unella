@@ -1,3 +1,4 @@
+import json
 import pathlib
 from dataclasses import dataclass
 from typing import Any
@@ -7,6 +8,7 @@ from unella.modules.mypy.main import MypyReport
 from unella.modules.ruff.main import RuffReport
 from unella.modules.structure.main import StructureReport
 from unella.modules.vulture.main import VultureReport
+from unella.utils import pascal_case_to_snake_case
 
 
 @dataclass
@@ -28,6 +30,10 @@ class AuditGenerator:
         for report_class in self.report_list:
             report = report_class(str(self.project_path))
             report.perform_analysis()
-            results[report_class.__name__] = report.get_results()
+            report_name = pascal_case_to_snake_case(report_class.__name__)
+            results[report_name] = report.get_results()
 
         return results
+
+    def get_json(self) -> str:
+        return json.dumps(self.get_data())

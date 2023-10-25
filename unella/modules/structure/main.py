@@ -1,4 +1,3 @@
-import glob
 import json
 import pathlib
 import subprocess
@@ -49,8 +48,7 @@ class StructureReport(Report):
         cmd_output = subprocess.check_output(cmd, shell=True)
         output = cmd_output.decode()
 
-        git_hash = output.strip()
-        return git_hash
+        return output.strip()
 
     def get_tree_structure(self) -> list[dict]:
         gitignore_path = self.project_path / ".gitignore"
@@ -58,8 +56,7 @@ class StructureReport(Report):
         cmd_output = subprocess.check_output(cmd, shell=True)
         output = cmd_output.decode()
 
-        data = json.loads(output)
-        return data
+        return json.loads(output)
 
     def get_python_version(self):
         raise NotImplementedError
@@ -106,27 +103,19 @@ class StructureReport(Report):
             self.project_path / ".pre-commit-config.yaml",
             self.project_path / ".pre-commit-config.yml",
         ]
-        return any([x.exists() for x in precommit_file_paths])
+        return any(x.exists() for x in precommit_file_paths)
 
     def get_tests_information(self) -> dict:
         # check if there are test folders or files
-        test_files = glob.glob("**/test_*.py", root_dir=self.project_path, recursive=True)
+        test_files = self.project_path.rglob("**/test_*.py")
         uses_pytest = False
         if test_files:
             # check if uses pytest
             gitignore_path = self.project_path / ".gitignore"
             excludes = get_grep_excludes(gitignore_path)
-            grep_command = " ".join(
-                [
-                    "grep",
-                    "-r",
-                    "pytest",
-                    str(self.project_path),
-                ]
-                + excludes
-            )
+            grep_command = " ".join(["grep", "-r", "pytest", str(self.project_path), *excludes])
             try:
-                cmd_output = subprocess.check_output(grep_command, shell=True)
+                subprocess.check_output(grep_command, shell=True)
                 uses_pytest = True
             except subprocess.CalledProcessError:
                 uses_pytest = False
@@ -144,9 +133,7 @@ class StructureReport(Report):
 
 
 def get_tree_ignores(gitignore_path: pathlib.Path) -> str:
-    """
-    Ignore some files + all the files contained in .gitignore when performing "tree" command.
-    """
+    """Ignore some files + all the files contained in .gitignore when performing "tree" command."""
     ignores = ["venv", "__pycache__", "*.pyc"]
 
     if gitignore_path.exists():

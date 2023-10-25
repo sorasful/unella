@@ -1,6 +1,5 @@
-from unella.utils import pascal_case_to_snake_case
-
 import pytest
+from unella.utils import pascal_case_to_snake_case
 
 
 @pytest.mark.parametrize(

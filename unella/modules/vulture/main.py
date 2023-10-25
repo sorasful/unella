@@ -1,11 +1,9 @@
-import json
 import pathlib
 import re
 import subprocess
 from dataclasses import dataclass
 
 from unella.modules.generic import Report
-
 
 VULTURE_LINE_REGEX = r"(?P<file_path>.*):(?P<line>\d+): (?P<msg>.*)\((?P<confidence>\d+).*\)"
 
@@ -29,7 +27,7 @@ class VultureReport(Report):
 
     def perform_analysis(self) -> None:
         # TODO: exclude everything from the gitignore
-        gitignore_path = self.project_path / ".gitignore"
+        self.project_path / ".gitignore"
         cmd = f"vulture {self.project_path} --exclude 'venv'"
         try:
             cmd_output = subprocess.check_output(cmd, shell=True)

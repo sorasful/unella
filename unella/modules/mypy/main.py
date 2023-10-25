@@ -1,11 +1,7 @@
-import json
-import pathlib
 import re
 import subprocess
 from collections import Counter
 from dataclasses import dataclass
-
-from loguru import logger
 
 from unella.modules.generic import Report
 
