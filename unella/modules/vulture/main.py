@@ -7,9 +7,7 @@ from dataclasses import dataclass
 from unella.modules.generic import Report
 
 
-VULTURE_LINE_REGEX = (
-    r"(?P<file_path>.*):(?P<line>\d+): (?P<msg>.*)\((?P<confidence>\d+).*\)"
-)
+VULTURE_LINE_REGEX = r"(?P<file_path>.*):(?P<line>\d+): (?P<msg>.*)\((?P<confidence>\d+).*\)"
 
 
 def get_tree_ignores(gitignore_path: pathlib.Path) -> str:
@@ -18,11 +16,7 @@ def get_tree_ignores(gitignore_path: pathlib.Path) -> str:
     if gitignore_path.exists():
         with gitignore_path.open("r") as f:
             lines = f.readlines()
-            git_ignores = [
-                line.strip()
-                for line in lines
-                if not line.startswith("#") and line.strip()
-            ]
+            git_ignores = [line.strip() for line in lines if not line.startswith("#") and line.strip()]
             ignores.extend(git_ignores)
 
     return "|".join(ignores)
@@ -65,10 +59,6 @@ class VultureReport(Report):
         self._cmd_output = output
 
     def get_results(self) -> list[dict]:
+        if self._data is None:
+            self.perform_analysis()
         return self._data
-
-    def render_json(self) -> str:
-        return json.dumps(self._data)
-
-    def render_html(self) -> str:
-        return ""

@@ -31,9 +31,9 @@ class MypyReport(Report):
         output = cmd_output.decode()
         matches = re.finditer(MYPY_LINE_REGEX, string=output)
 
-        file_counter = Counter()
-        msg_counter = Counter()
-        msg_category_counter = Counter()
+        file_counter: Counter = Counter()
+        msg_counter: Counter = Counter()
+        msg_category_counter: Counter = Counter()
 
         for match in matches:
             file_path = match.group("file_path")
@@ -56,16 +56,3 @@ class MypyReport(Report):
             "most_messages": self._most_messages,
             "most_messages_categories": self._most_messages_categories,
         }
-
-    def render_json(self) -> str:
-        return json.dumps(self.get_results())
-
-    def render_html(self) -> str:
-        return
-
-
-if __name__ == "__main__":
-    mypy_report = MypyReport(project_to_audit="/home/tevak/dev/jwt_tool")
-    mypy_report.perform_analysis()
-
-    # print(mypy_report.render_json())

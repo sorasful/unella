@@ -136,17 +136,11 @@ class StructureReport(Report):
             "uses_pytest": uses_pytest,
         }
 
-    def get_results(self) -> dict:
+    def get_results(self) -> StructureReportData:
         if self._data is None:
             self.perform_analysis()
 
         return self._data
-
-    def render_json(self) -> str:
-        return json.dumps(self.get_results())
-
-    def render_html(self) -> str:
-        return ""
 
 
 def get_tree_ignores(gitignore_path: pathlib.Path) -> str:
@@ -158,11 +152,7 @@ def get_tree_ignores(gitignore_path: pathlib.Path) -> str:
     if gitignore_path.exists():
         with gitignore_path.open("r") as f:
             lines = f.readlines()
-            git_ignores = [
-                line.strip()
-                for line in lines
-                if not line.startswith("#") and line.strip()
-            ]
+            git_ignores = [line.strip() for line in lines if not line.startswith("#") and line.strip()]
             ignores.extend(git_ignores)
 
     return "|".join(ignores)
@@ -174,11 +164,7 @@ def get_grep_excludes(gitignore_path: pathlib.Path) -> list:
     if gitignore_path.exists():
         with gitignore_path.open("r") as f:
             lines = f.readlines()
-            git_ignores = [
-                line.strip()
-                for line in lines
-                if not line.startswith("#") and line.strip()
-            ]
+            git_ignores = [line.strip() for line in lines if not line.startswith("#") and line.strip()]
             ignores.extend(git_ignores)
 
     grep_excludes = []

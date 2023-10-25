@@ -24,16 +24,3 @@ class RuffReport(Report):
         if self._data is None:
             self.perform_analysis()
         return self._data
-
-    def render_json(self) -> str:
-        return json.dumps(self.get_results())
-
-    def render_html(self) -> str:
-        return ""
-
-
-if __name__ == "__main__":
-    ruff_report = RuffReport(project_to_audit="/home/tevak/dev/jwt_tool")
-    ruff_report.perform_analysis()
-
-    print(ruff_report.render_json())

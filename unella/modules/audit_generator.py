@@ -26,7 +26,7 @@ class AuditGenerator:
     def get_data(self) -> dict[str, Any]:
         results = {}
         for report_class in self.report_list:
-            report = report_class(self.project_path)
+            report = report_class(str(self.project_path))
             report.perform_analysis()
             results[report_class.__name__] = report.get_results()
 

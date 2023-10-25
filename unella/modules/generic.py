@@ -18,11 +18,3 @@ class Report(abc.ABC):
     @abc.abstractmethod
     def get_results(self):
         raise NotImplementedError
-
-    @abc.abstractmethod
-    def render_json(self) -> str:
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    def render_html(self) -> str:
-        raise NotImplementedError
