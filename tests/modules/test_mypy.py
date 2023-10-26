@@ -2,7 +2,7 @@ from tests.conftest import ROOT_DIR
 from unella.modules.mypy.main import MypyReport
 
 
-def test_mypy_report():
+def test_mypy_report() -> None:
     report = MypyReport(ROOT_DIR)
     report.perform_analysis()
     results = report.get_results()

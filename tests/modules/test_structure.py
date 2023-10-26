@@ -2,7 +2,7 @@ from tests.conftest import ROOT_DIR
 from unella.modules.structure.main import StructureReport
 
 
-def test_structure_report():
+def test_structure_report() -> None:
     report = StructureReport(ROOT_DIR)
     report.perform_analysis()
     results = report.get_results()

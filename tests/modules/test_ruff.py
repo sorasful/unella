@@ -2,7 +2,7 @@ from tests.conftest import ROOT_DIR
 from unella.modules.ruff.main import RuffReport
 
 
-def test_ruff_report():
+def test_ruff_report() -> None:
     report = RuffReport(ROOT_DIR)
     report.perform_analysis()
     first_entry, *entries = report.get_results()

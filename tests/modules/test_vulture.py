@@ -2,7 +2,7 @@ from tests.conftest import ROOT_DIR
 from unella.modules.vulture.main import VultureReport
 
 
-def test_vulture_report():
+def test_vulture_report() -> None:
     report = VultureReport(ROOT_DIR)
     report.perform_analysis()
     first_entry, *entries = report.get_results()
