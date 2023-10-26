@@ -1,0 +1,21 @@
+<h2>Vulture Report</h2>
+<table>
+    <thead>
+        <tr>
+            <th>File path</th>
+            <th>Line</th>
+            <th>Message</th>
+            <th>Confidence</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in data %}
+        <tr>
+            <td>{{ item.file_path }}</td>
+            <td>{{ item.line }}</td>
+            <td>{{ item.msg }}</td>
+            <td>{{ item.confidence }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

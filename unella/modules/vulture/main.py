@@ -1,4 +1,3 @@
-import pathlib
 import re
 import subprocess
 from dataclasses import dataclass
@@ -8,27 +7,13 @@ from unella.modules.generic import Report
 VULTURE_LINE_REGEX = r"(?P<file_path>.*):(?P<line>\d+): (?P<msg>.*)\((?P<confidence>\d+).*\)"
 
 
-def get_tree_ignores(gitignore_path: pathlib.Path) -> str:
-    ignores = ["venv", "__pycache__", "*.pyc"]
-
-    if gitignore_path.exists():
-        with gitignore_path.open("r") as f:
-            lines = f.readlines()
-            git_ignores = [line.strip() for line in lines if not line.startswith("#") and line.strip()]
-            ignores.extend(git_ignores)
-
-    return "|".join(ignores)
-
-
 @dataclass
 class VultureReport(Report):
     _cmd_output: str | None = None
     _data: list[dict] | None = None
 
     def perform_analysis(self) -> None:
-        # TODO: exclude everything from the gitignore
-        self.project_path / ".gitignore"
-        cmd = f"vulture {self.project_path} --exclude 'venv'"
+        cmd = f"vulture {self.project_path} --exclude venv "
         try:
             cmd_output = subprocess.check_output(cmd, shell=True)
         except subprocess.CalledProcessError as e:

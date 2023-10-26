@@ -3,6 +3,8 @@ import pathlib
 from dataclasses import dataclass
 from typing import Any
 
+from jinja2 import Environment, FileSystemLoader
+
 from unella.modules.generic import Report
 from unella.modules.mypy.main import MypyReport
 from unella.modules.ruff.main import RuffReport
@@ -19,9 +21,9 @@ class AuditGenerator:
     @property
     def report_list(self) -> list[type[Report]]:
         return [
+            StructureReport,
             RuffReport,
             MypyReport,
-            StructureReport,
             VultureReport,
         ]
 
@@ -37,3 +39,13 @@ class AuditGenerator:
 
     def get_json(self) -> str:
         return json.dumps(self.get_data())
+
+    def get_html(self) -> str:
+        env = Environment(loader=FileSystemLoader("templates"))
+        template = env.get_template("main_template.html")
+
+        reports_html = {}
+        for report_class in self.report_list:
+            report_name = pascal_case_to_snake_case(report_class.__name__)
+            reports_html[report_name] = report_class(str(self.project_path)).to_html()
+        return template.render(reports=reports_html)

@@ -1,0 +1,38 @@
+<h2>Structure Report</h2>
+
+<section>
+    <h3>Git Information</h3>
+    <p>Is Git Repository: {{ data.is_git_repository }}</p>
+    {% if data.git_repository_hash %}
+    <p>Git Repository Hash: {{ data.git_repository_hash }}</p>
+    {% endif %}
+</section>
+
+<section>
+    <h3>Project Structure</h3>
+    <ul>
+        {% for item in data.structure %}
+        <li>{{ item.name }} {% if item.type == "directory" %} (Directory) {% else %} (File) {% endif %}</li>
+        {% endfor %}
+    </ul>
+</section>
+
+<section>
+    <h3>Configuration Files</h3>
+    <p>Has Precommit File: {{ data.has_precommit_file }}</p>
+</section>
+
+<section>
+    <h3>Testing</h3>
+    <p>Has Tests: {{ data.has_tests }}</p>
+    <p>Uses Pytest: {{ data.uses_pytest }}</p>
+</section>
+
+<section>
+    <h3>Dependencies Detection</h3>
+    <ul>
+        {% for dep, exists in data.dependencies.items() %}
+        <li>{{ dep }}: {{ exists }}</li>
+        {% endfor %}
+    </ul>
+</section>

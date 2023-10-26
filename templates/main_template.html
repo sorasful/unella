@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Audit Report</title>
+</head>
+<body>
+    <h1>Audit Report</h1>
+    {% for name, report_html in reports.items() %}
+    <div id="{{ name }}">
+        {{ report_html }}
+    </div>
+    {% endfor %}
+</body>
+</html>

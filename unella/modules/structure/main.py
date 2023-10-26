@@ -132,7 +132,7 @@ class StructureReport(Report):
         }
 
     def get_results(self) -> StructureReportData:
-        if self._data is None:
+        if not self._data:
             self.perform_analysis()
 
         return self._data

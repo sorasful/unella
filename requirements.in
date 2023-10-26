@@ -3,3 +3,4 @@ mypy
 vulture
 wily
 loguru
+jinja2

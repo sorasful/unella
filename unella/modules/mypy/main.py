@@ -54,6 +54,9 @@ class MypyReport(Report):
         self._cmd_output = output
 
     def get_results(self) -> ResultDict:
+        if self._file_most_messages is None or self._most_messages is None or self._most_messages_categories is None:
+            self.perform_analysis()
+
         return {
             "files_most_messages": self._file_most_messages,
             "most_messages": self._most_messages,

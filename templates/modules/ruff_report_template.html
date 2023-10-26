@@ -1,0 +1,21 @@
+<h2>Ruff Report</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Message</th>
+            <th>Fixable</th>
+            <th>Count</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in data %}
+        <tr>
+            <td>{{ item.code }}</td>
+            <td>{{ item.message }}</td>
+            <td>{{ item.fixable }}</td>
+            <td>{{ item.count }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

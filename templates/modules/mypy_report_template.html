@@ -1,0 +1,61 @@
+<h2>Mypy Report</h2>
+
+<section>
+    <h3>Files with the most messages</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>File path</th>
+                <th>Number of messages</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file_path, count in data.files_most_messages %}
+            <tr>
+                <td>{{ file_path }}</td>
+                <td>{{ count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h3>Most frequent message</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Message</th>
+                <th>Number of message</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for msg, count in data.most_messages %}
+            <tr>
+                <td>{{ msg }}</td>
+                <td>{{ count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h3>Categories with most messages</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Number of messages</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category, count in data.most_messages_categories %}
+            <tr>
+                <td>{{ category }}</td>
+                <td>{{ count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
