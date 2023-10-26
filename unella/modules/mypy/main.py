@@ -2,10 +2,17 @@ import re
 import subprocess
 from collections import Counter
 from dataclasses import dataclass
+from typing import TypedDict
 
 from unella.modules.generic import Report
 
 MYPY_LINE_REGEX = r"(?P<file_path>.*):\d+: (?P<msg_type>error|warning):(?P<msg>.*)\[(?P<msg_category>[\w_-]+)\]"
+
+
+class ResultDict(TypedDict):
+    files_most_messages: list | None
+    most_messages: list | None
+    most_messages_categories: list | None
 
 
 @dataclass
@@ -46,7 +53,7 @@ class MypyReport(Report):
 
         self._cmd_output = output
 
-    def get_results(self) -> dict:
+    def get_results(self) -> ResultDict:
         return {
             "files_most_messages": self._file_most_messages,
             "most_messages": self._most_messages,

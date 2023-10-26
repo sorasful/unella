@@ -62,3 +62,14 @@ ignore = [
 ]
 line-length = 120
 src = ["unella", ]
+
+
+[tool.coverage.run]
+omit = ["*/tests/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+  'pragma: no cover',
+  'if TYPE_CHECKING:',
+  'raise NotImplementedError.*',
+]

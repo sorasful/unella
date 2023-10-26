@@ -13,7 +13,13 @@ class StructureReportData(t.TypedDict, total=False):
     has_precommit_file: bool
     has_tests: bool
     uses_pytest: bool
-    dependencies: dict
+    dependencies: "DependenciesDict"
+
+
+DependenciesDict = t.TypedDict(
+    "DependenciesDict",
+    {"requirements.txt": bool, "pipenv": bool, "poetry": bool, "setuptools": bool, "pip-tools": bool},
+)
 
 
 class StructureReport(Report):
@@ -61,7 +67,7 @@ class StructureReport(Report):
     def get_python_version(self):
         raise NotImplementedError
 
-    def get_dependencies(self) -> dict:
+    def get_dependencies(self) -> DependenciesDict:
         project = pathlib.Path(self.project_path)
         dependencies = {
             "requirements.txt": False,

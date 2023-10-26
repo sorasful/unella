@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from loguru import logger
 
-from unella.modules.audit_generator import AuditGenerator
+from unella.audit_generator import AuditGenerator
 
 PROJECT_TO_AUDIT = "/home/tevak/dev/jwt_tool"
 
