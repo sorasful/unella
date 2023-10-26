@@ -77,15 +77,12 @@ class StructureReport(Report):
             "pip-tools": False,
         }
 
-        # Vérifier requirements.txt
         if (project / "requirements.txt").exists():
             dependencies["requirements.txt"] = True
 
-        # Vérifier Pipfile
         if (project / "Pipfile").exists():
             dependencies["pipenv"] = True
 
-        # Vérifier pyproject.toml pour poetry
         pyproject = project / "pyproject.toml"
         if pyproject.exists():
             with pyproject.open("r") as f:
@@ -93,11 +90,9 @@ class StructureReport(Report):
                 if "[tool.poetry]" in content:
                     dependencies["poetry"] = True
 
-        # Vérifier setup.py
         if (project / "setup.py").exists():
             dependencies["setuptools"] = True
 
-        # Vérifier pip-tools
         in_files = [f for f in project.iterdir() if f.name.endswith(".in")]
         if in_files:
             dependencies["pip-tools"] = True

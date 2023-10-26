@@ -5,6 +5,8 @@
 </head>
 <body>
     <h1>Audit Report</h1>
+    <p>Project : {{ project_name }}</p>
+    <p>Date : {{ audit_date }}</p>
     {% for name, report_html in reports.items() %}
     <div id="{{ name }}">
         {{ report_html }}

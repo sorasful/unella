@@ -1,3 +1,4 @@
+import datetime
 import json
 import pathlib
 from dataclasses import dataclass
@@ -48,4 +49,9 @@ class AuditGenerator:
         for report_class in self.report_list:
             report_name = pascal_case_to_snake_case(report_class.__name__)
             reports_html[report_name] = report_class(str(self.project_path)).to_html()
-        return template.render(reports=reports_html)
+
+        now = datetime.datetime.now()
+        formatted_now = now.strftime("%B %d, %Y %H:%M:%S")
+        project_name = self.project_path.name
+
+        return template.render(reports=reports_html, audit_date=formatted_now, project_name=project_name)
