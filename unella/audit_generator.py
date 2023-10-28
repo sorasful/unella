@@ -6,6 +6,7 @@ from typing import Any
 
 from jinja2 import Environment, FileSystemLoader
 
+from unella.cli import ProgressBar
 from unella.modules.generic import Report
 from unella.modules.mypy.main import MypyReport
 from unella.modules.radon.main import RadonReport
@@ -17,7 +18,7 @@ from unella.utils import pascal_case_to_snake_case
 
 @dataclass
 class AuditGenerator:
-    def __init__(self, project_to_audit: str) -> None:
+    def __init__(self, project_to_audit: str | pathlib.Path) -> None:
         self.project_path = pathlib.Path(project_to_audit)
 
     @property
@@ -48,7 +49,8 @@ class AuditGenerator:
         template = env.get_template("main_template.html")
 
         reports_html = {}
-        for report_class in self.report_list:
+        progress_bar = ProgressBar(len(self.report_list))
+        for step, report_class in zip(progress_bar.start(), self.report_list):
             report_name = pascal_case_to_snake_case(report_class.__name__)
             reports_html[report_name] = report_class(str(self.project_path)).to_html()
 

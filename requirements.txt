@@ -34,8 +34,12 @@ loguru==0.7.2
     # via -r requirements.in
 mando==0.6.4
     # via radon
+markdown-it-py==3.0.0
+    # via rich
 markupsafe==2.1.3
     # via jinja2
+mdurl==0.1.2
+    # via markdown-it-py
 mypy==1.6.1
     # via -r requirements.in
 mypy-extensions==1.0.0
@@ -50,12 +54,18 @@ plotly==5.17.0
     # via wily
 progress==1.6
     # via wily
+pygments==2.16.1
+    # via rich
 radon==5.1.0
-    # via wily
+    # via
+    #   -r requirements.in
+    #   wily
 referencing==0.30.2
     # via
     #   jsonschema
     #   jsonschema-specifications
+rich==13.6.0
+    # via -r requirements.in
 rpds-py==0.10.6
     # via
     #   jsonschema

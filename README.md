@@ -33,10 +33,10 @@ Use the Unella Command-Line Interface (CLI) to start your audit:
 
 ```bash
 # json output to stdout 
-unella /path_to_python_project/ --output-format json
+unella --path /path_to_python_project/ --output-format json
 
 # generate a HTML report 
-unella /path_to_python_project/ --output-format html
+unella --path /path_to_python_project/ --output-format html
 ```
 
 Replace path_to_python_project with the path to your Python project.

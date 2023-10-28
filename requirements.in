@@ -3,5 +3,6 @@ mypy
 vulture
 wily
 radon
+rich
 loguru
 jinja2
