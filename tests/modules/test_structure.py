@@ -13,8 +13,8 @@ def test_structure_report() -> None:
     assert results["has_precommit_file"] is False
     assert results["structure"] is not None
     dependencies = results["dependencies"]
-    assert dependencies["requirements.txt"] is True
+    assert dependencies["requirements.txt"] is False
     assert dependencies["pipenv"] is False
     assert dependencies["poetry"] is False
-    assert dependencies["pip-tools"] is True
-    assert dependencies["setuptools"] is False
+    assert dependencies["pip-tools"] is False
+    assert dependencies["setuptools"] is True

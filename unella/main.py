@@ -47,6 +47,8 @@ def main() -> None:
         with open(report_file_path, "w") as f:
             f.write(report_html)
 
+        logger.info(f"Report written in {report_file_path.absolute()}")
+
 
 if __name__ == "__main__":
     main()

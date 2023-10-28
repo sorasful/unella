@@ -22,6 +22,13 @@ vulture: https://github.com/jendrikseipp/vulture
 
 ## 💼 Installation & Usage  
 
+### From Pypi
+```bash
+pip install unella
+```
+
+
+### From source
 ```bash
 git clone https://github.com/sorasful/unella.git
 
