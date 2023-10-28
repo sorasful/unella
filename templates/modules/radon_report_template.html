@@ -1,0 +1,39 @@
+<h2>Radon Complexity Report</h2>
+
+<section>
+    <h3>Average Complexity</h3>
+    <p>Average Complexity of the Project: {{ data.average_complexity }}</p>
+</section>
+
+<section>
+    <h3>Code Constructs Complexity</h3>
+    {% for file_path, complexities in data.complexity.items() %}
+    <h4>File: {{ file_path }}</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Complexity</th>
+                <th>Rank</th>
+                <th>Line Number</th>
+                <th>End Line</th>
+                <th>Column Offset</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in complexities %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.type }}</td>
+                <td>{{ item.complexity }}</td>
+                <td>{{ item.rank }}</td>
+                <td>{{ item.lineno }}</td>
+                <td>{{ item.endline }}</td>
+                <td>{{ item.col_offset }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endfor %}
+</section>

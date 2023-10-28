@@ -8,6 +8,7 @@ from jinja2 import Environment, FileSystemLoader
 
 from unella.modules.generic import Report
 from unella.modules.mypy.main import MypyReport
+from unella.modules.radon.main import RadonReport
 from unella.modules.ruff.main import RuffReport
 from unella.modules.structure.main import StructureReport
 from unella.modules.vulture.main import VultureReport
@@ -26,6 +27,7 @@ class AuditGenerator:
             RuffReport,
             MypyReport,
             VultureReport,
+            RadonReport,
         ]
 
     def get_data(self) -> dict[str, Any]:
