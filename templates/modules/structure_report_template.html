@@ -11,8 +11,21 @@
 <section>
     <h3>Project Structure</h3>
     <ul>
+        {% macro render_directory(item) %}
+            <li>
+                {{ item.name }}
+                {% if item.type == "directory" and item.contents %}
+                    <ul>
+                        {% for subitem in item.contents %}
+                            {{ render_directory(subitem) }}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </li>
+        {% endmacro %}
+
         {% for item in data.structure %}
-        <li>{{ item.name }} {% if item.type == "directory" %} (Directory) {% else %} (File) {% endif %}</li>
+            {{ render_directory(item) }}
         {% endfor %}
     </ul>
 </section>
