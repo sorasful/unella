@@ -6,6 +6,8 @@ import subprocess
 import typing as t
 import venv
 
+import yaml
+
 from unella.modules.generic import Report
 
 
@@ -14,6 +16,7 @@ class StructureReportData(t.TypedDict, total=False):
     git_repository_hash: str | None
     structure: list[dict]
     has_precommit_file: bool
+    precommit_config: PreCommitConfig
     has_tests: bool
     uses_pytest: bool
     coverage: "CoverageData" | None
@@ -64,6 +67,25 @@ class CoverageData(t.TypedDict):
     totals: CoverageTotals
 
 
+class Hook(t.TypedDict, total=False):
+    id: str
+    args: list[str]
+    name: str
+    entry: str
+    language: str
+    types: list[str]
+
+
+class Repo(t.TypedDict):
+    repo: str
+    rev: str
+    hooks: list[Hook]
+
+
+class PreCommitConfig(t.TypedDict):
+    repos: list[Repo]
+
+
 class StructureReport(Report):
     def __init__(self, project_to_audit: str | pathlib.Path) -> None:
         self._cmd_output = None
@@ -79,6 +101,7 @@ class StructureReport(Report):
 
         self._data["structure"] = self.get_tree_structure()
         self._data["has_precommit_file"] = self.check_precommit_file_exists()
+        self._data["precommit_config"] = self.get_pre_commit_config()
 
         test_information = self.get_tests_information()
         self._data["has_tests"] = test_information["has_tests"]
@@ -191,6 +214,23 @@ class StructureReport(Report):
             self.project_path / ".pre-commit-config.yml",
         ]
         return any(x.exists() for x in precommit_file_paths)
+
+    def get_pre_commit_config(self) -> PreCommitConfig | None:
+        file_names = ["pre-commit.yml", ".pre-commit-config.yaml", ".pre-commit-config.yml"]
+
+        for file_name in file_names:
+            try:
+                with open(file_name, "r", encoding="utf-8") as file:
+                    # Load the YAML file content into a Python dictionary
+                    pre_commit_data: PreCommitConfig = yaml.safe_load(file)
+                    return pre_commit_data
+            except FileNotFoundError:
+                continue  # File not found, try the next file name
+            except yaml.YAMLError as exc:
+                print(f"Error reading YAML file: {exc}")
+                return None
+
+        return None
 
     def get_tests_information(self) -> dict:
         # check if there are test folders or files
