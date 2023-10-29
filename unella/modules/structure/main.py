@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 import json
 import pathlib
 import subprocess
 import typing as t
+import venv
 
 from unella.modules.generic import Report
 
@@ -13,6 +16,7 @@ class StructureReportData(t.TypedDict, total=False):
     has_precommit_file: bool
     has_tests: bool
     uses_pytest: bool
+    coverage: "CoverageData" | None
     dependencies: "DependenciesDict"
 
 
@@ -20,6 +24,44 @@ DependenciesDict = t.TypedDict(
     "DependenciesDict",
     {"requirements.txt": bool, "pipenv": bool, "poetry": bool, "setuptools": bool, "pip-tools": bool},
 )
+
+
+class CoverageSummary(t.TypedDict):
+    covered_lines: int
+    num_statements: int
+    percent_covered: float
+    percent_covered_display: str
+    missing_lines: int
+    excluded_lines: int
+
+
+class FileCoverage(t.TypedDict):
+    executed_lines: list[int]
+    summary: CoverageSummary
+    missing_lines: list[int]
+    excluded_lines: list[int]
+
+
+class CoverageMeta(t.TypedDict):
+    version: str
+    timestamp: str
+    branch_coverage: bool
+    show_contexts: bool
+
+
+class CoverageTotals(t.TypedDict):
+    covered_lines: int
+    num_statements: int
+    percent_covered: float
+    percent_covered_display: str
+    missing_lines: int
+    excluded_lines: int
+
+
+class CoverageData(t.TypedDict):
+    meta: CoverageMeta
+    files: dict[str, FileCoverage]
+    totals: CoverageTotals
 
 
 class StructureReport(Report):
@@ -41,6 +83,7 @@ class StructureReport(Report):
         test_information = self.get_tests_information()
         self._data["has_tests"] = test_information["has_tests"]
         self._data["uses_pytest"] = test_information["uses_pytest"]
+        self._data["coverage"] = test_information["coverage"]
         self._data["dependencies"] = self.get_dependencies()
 
     def check_is_git_repository(self) -> bool:
@@ -99,6 +142,49 @@ class StructureReport(Report):
 
         return dependencies
 
+    def get_coverage(self) -> dict | None:
+        # if we run on this project we'll get an infinite loop
+        if self.project_path.name == "unella":
+            return None
+
+        # we need to install project dependencies to be able to run the tests
+        env_dir = pathlib.Path("test_venv")
+        venv.create(env_dir, with_pip=True)
+
+        def run_command(cmd):
+            subprocess.run(
+                cmd,
+                shell=True,
+                check=True,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+
+        # activate virtualenv and install test dependencies
+        python_venv = env_dir / "bin" / "python"
+        run_command(f"{python_venv.absolute()} -m pip install pytest pytest-cov coverage covdefaults")
+
+        # install project dependencies
+        run_command(f"{python_venv.absolute()} -m pip install {self.project_path}")
+
+        # run the tests
+        run_command(f"cd {self.project_path} && {python_venv.absolute()} -m pytest --cov={self.project_path} || true")
+
+        # generate coverage.json file
+        run_command(f"cd {self.project_path} && {python_venv.absolute()} -m coverage json")
+
+        # disable and delete virtualenv
+        subprocess.run(f"rm -rf {env_dir}", shell=True)
+
+        coverage_file = self.project_path / "coverage.json"
+
+        with open(coverage_file, "r") as f:
+            data = json.load(f)
+
+        coverage_file.unlink()
+
+        return data
+
     def check_precommit_file_exists(self) -> bool:
         precommit_file_paths = [
             self.project_path / ".pre-commit-config.yaml",
@@ -110,6 +196,7 @@ class StructureReport(Report):
         # check if there are test folders or files
         test_files = self.project_path.rglob("**/test_*.py")
         uses_pytest = False
+        coverage = None
         if test_files:
             # check if uses pytest
             gitignore_path = self.project_path / ".gitignore"
@@ -121,9 +208,14 @@ class StructureReport(Report):
             except subprocess.CalledProcessError:
                 uses_pytest = False
 
+            # get the coverage
+            if uses_pytest:
+                coverage = self.get_coverage()
+
         return {
             "has_tests": bool(test_files),
             "uses_pytest": uses_pytest,
+            "coverage": coverage,
         }
 
     def get_results(self) -> StructureReportData:

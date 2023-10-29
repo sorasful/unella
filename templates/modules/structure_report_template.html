@@ -26,6 +26,10 @@
     <h3>Testing</h3>
     <p>Has Tests: {{ data.has_tests }}</p>
     <p>Uses Pytest: {{ data.uses_pytest }}</p>
+    {% if data.uses_pytest and data.coverage %}
+    <p>Coverage : {{ data.coverage['totals']['percent_covered_display'] }}</p>
+    {% endif %}}
+
 </section>
 
 <section>

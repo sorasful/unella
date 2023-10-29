@@ -33,7 +33,9 @@ pip install unella
 git clone https://github.com/sorasful/unella.git
 
 cd unella
-pip install -r requirements.txt
+python -m venv venv
+source venv/bin/activate
+pip install .
 ```
 
 Use the Unella Command-Line Interface (CLI) to start your audit:
