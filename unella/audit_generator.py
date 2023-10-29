@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from jinja2 import Environment, FileSystemLoader
+from markdownify import markdownify as md
 
 from unella.cli import ProgressBar
 from unella.modules.generic import Report
@@ -59,3 +60,7 @@ class AuditGenerator:
         project_name = self.project_path.name
 
         return template.render(reports=reports_html, audit_date=formatted_now, project_name=project_name)
+
+    def get_markdown(self) -> str:
+        html = self.get_html()
+        return md(html)

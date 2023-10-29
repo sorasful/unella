@@ -17,3 +17,10 @@ def test_get_html() -> None:
     report_html = audit_generator.get_html()
 
     assert "<h1>Audit Report</h1>" in report_html
+
+
+def test_get_markdown() -> None:
+    audit_generator = AuditGenerator(project_to_audit=ROOT_DIR)
+    report_markdown = audit_generator.get_markdown()
+
+    assert "### Project Structure" in report_markdown

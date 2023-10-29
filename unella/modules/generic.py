@@ -3,6 +3,7 @@ import pathlib
 from dataclasses import dataclass, field
 
 from jinja2 import Environment, FileSystemLoader
+from markdownify import markdownify as md
 
 from unella.utils import pascal_case_to_snake_case
 

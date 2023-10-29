@@ -14,7 +14,10 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Generate an audit report")
     parser.add_argument("--path", help="Path of the folder you want to audit.")
     parser.add_argument(
-        "--output-format", choices=["html", "json"], default="html", help="Output format (html or json)."
+        "--output-format",
+        choices=["html", "json", "markdown"],
+        default="html",
+        help="Output format (html, json, markdown).",
     )
 
     args = parser.parse_args()
@@ -46,6 +49,20 @@ def main() -> None:
 
         with open(report_file_path, "w") as f:
             f.write(report_html)
+
+        logger.info(f"Report written in {report_file_path.absolute()}")
+
+    elif output_format == "markdown":
+        report_markdown = audit_generator.get_markdown()
+
+        now = datetime.datetime.now()
+        formatted_now = now.strftime("%Y-%m-%d_%H-%M")
+        report_dir_path = pathlib.Path(f"report_{formatted_now}")
+        report_dir_path.mkdir(parents=True, exist_ok=True)
+        report_file_path = report_dir_path / "report.md"
+
+        with open(report_file_path, "w") as f:
+            f.write(report_markdown)
 
         logger.info(f"Report written in {report_file_path.absolute()}")
 
