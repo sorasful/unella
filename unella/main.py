@@ -34,6 +34,9 @@ def main() -> None:
         sys.exit(1)
 
     audit_generator = AuditGenerator(project_to_audit=project_path)
+    results_dir = pathlib.Path("results")
+    if not results_dir.exists():
+        results_dir.mkdir()
 
     if output_format == "json":
         report_json = audit_generator.get_json()
@@ -43,7 +46,7 @@ def main() -> None:
 
         now = datetime.datetime.now()
         formatted_now = now.strftime("%Y-%m-%d_%H-%M")
-        report_dir_path = pathlib.Path(f"report_{formatted_now}")
+        report_dir_path = results_dir / f"report_{formatted_now}"
         report_dir_path.mkdir(parents=True, exist_ok=True)
         report_file_path = report_dir_path / "index.html"
 
@@ -57,7 +60,7 @@ def main() -> None:
 
         now = datetime.datetime.now()
         formatted_now = now.strftime("%Y-%m-%d_%H-%M")
-        report_dir_path = pathlib.Path(f"report_{formatted_now}")
+        report_dir_path = results_dir / f"report_{formatted_now}"
         report_dir_path.mkdir(parents=True, exist_ok=True)
         report_file_path = report_dir_path / "report.md"
 

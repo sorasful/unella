@@ -1,53 +1,47 @@
-# Unella: Automatic Audit for Python Projects  
-Unella is a project to automate audits exclusively on Python projects.  
+# Unella: Automatic Audit for Python Projects
+Unella is a project to automate audits exclusively on Python projects.
 
-## 🚧 Project Status  
-Please note that Unella is currently in active development.   
-While it is functional, expect regular updates and enhancements.  
+## 🚧 Project Status
+Please note that Unella is currently in active development.
+While it is functional, expect regular updates and enhancements.
 
-## 📄 Output Formats  
+## 📄 Output Formats
 With Unella, you can generate audit results in two formats:
 
-JSON: Structured data that can be easily consumed by other applications.  
-HTML Report: A comprehensive, visual report detailing the audit findings.  
+JSON: Structured data that can be easily consumed by other applications.
+HTML Report: A comprehensive, visual report detailing the audit findings.
+Markdown Report: Same as HTML but in markdown..
 
-## 🛠️ Tools Integrated  
+## 🛠️ Tools Integrated
 Unella is powered by a suite of reputable Python tools to offer a diverse range of insights:
 
-ruff: https://github.com/astral-sh/ruff  
-mypy: https://github.com/python/mypy  
-vulture: https://github.com/jendrikseipp/vulture  
+ruff: https://github.com/astral-sh/ruff
+mypy: https://github.com/python/mypy
+vulture: https://github.com/jendrikseipp/vulture
 
-...and several other tools to fetch a plethora of information.  
+...and several other tools to fetch a plethora of information.
 
-## 💼 Installation & Usage  
+## 💼 Installation & Usage
+Use the Unella Command-Line Interface (CLI) to start your audit through Docker:
+We need to mount the directory we want to analyze to `/path`.
+We need to mount our current directory to store the results there for HTML and JSON reports.
 
-### From Pypi
+### From Docker hub
 ```bash
-pip install unella
+docker build -t unella .
+docker run -v /home/tevak/dev/jwt_tool:/path -v "$PWD/results:/opt/unella/results"  -it unella  --path /path
 ```
 
-
-### From source
+For example if you want to get JSON as stdout
 ```bash
-git clone https://github.com/sorasful/unella.git
-
-cd unella
-python -m venv venv
-source venv/bin/activate
-pip install .
+docker run -v /home/tevak/dev/jwt_tool:/path -v "$PWD/results:/opt/unella/results"  -it unella  --path /path --output-format json
 ```
 
-Use the Unella Command-Line Interface (CLI) to start your audit:
-
+If you want to generate a HTML report you'll need to mount a directory to get results
 ```bash
-# json output to stdout 
-unella --path /path_to_python_project/ --output-format json
-
-# generate a HTML report 
-unella --path /path_to_python_project/ --output-format html
+docker run -v /home/tevak/dev/jwt_tool:/path -v "$PWD/results:/opt/unella/results"  -it unella  --path /path --output-format html
 ```
+
 
 Replace path_to_python_project with the path to your Python project.
 For an HTML report, replace json with html.
-

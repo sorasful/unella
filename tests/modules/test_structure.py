@@ -61,7 +61,7 @@ def test_structure_report(get_coverage_mock) -> None:
     }
     assert results["structure"] is not None
     dependencies = results["dependencies"]
-    assert dependencies["requirements.txt"] is False
+    assert dependencies["requirements.txt"] is True
     assert dependencies["pipenv"] is False
     assert dependencies["poetry"] is False
     assert dependencies["pip-tools"] is False
