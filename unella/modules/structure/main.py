@@ -7,6 +7,7 @@ import typing as t
 import venv
 
 import yaml
+from loguru import logger
 
 from unella.modules.generic import Report
 
@@ -250,7 +251,11 @@ class StructureReport(Report):
 
             # get the coverage
             if uses_pytest:
-                coverage = self.get_coverage()
+                try:
+                    coverage = self.get_coverage()
+                except Exception as e:
+                    logger.warning("Could not get coverage", exc_info=True)
+                    coverage = None
 
         return {
             "has_tests": bool(test_files),

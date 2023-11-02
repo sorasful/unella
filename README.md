@@ -15,9 +15,11 @@ Markdown Report: Same as HTML but in markdown..
 ## 🛠️ Tools Integrated
 Unella is powered by a suite of reputable Python tools to offer a diverse range of insights:
 
-ruff: https://github.com/astral-sh/ruff
-mypy: https://github.com/python/mypy
+Ruff: https://github.com/astral-sh/ruff
+Mypy: https://github.com/python/mypy
 vulture: https://github.com/jendrikseipp/vulture
+Radon: https://github.com/rubik/radon
+Gitleaks: https://github.com/gitleaks/gitleaks
 
 ...and several other tools to fetch a plethora of information.
 

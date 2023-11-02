@@ -1,0 +1,53 @@
+<h2>Gitleaks Report</h2>
+
+<section>
+    <h3>Potential Leaks Detected</h3>
+    <p>Number of leaks detected: {{ data.leaks|length }}</p>
+</section>
+
+<section>
+    <h3>Leak Details</h3>
+    {% for leak in data.leaks %}
+    <h4>File: {{ leak.file }}</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Start Line</th>
+                <th>End Line</th>
+                <th>Start Column</th>
+                <th>End Column</th>
+                <th>Match</th>
+                <th>Secret</th>
+                <th>Commit</th>
+                <th>Entropy</th>
+                <th>Author</th>
+                <th>Email</th>
+                <th>Date</th>
+                <th>Message</th>
+                <th>Rule ID</th>
+                <th>Fingerprint</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ leak.description }}</td>
+                <td>{{ leak.start_line }}</td>
+                <td>{{ leak.end_line }}</td>
+                <td>{{ leak.start_column }}</td>
+                <td>{{ leak.end_column }}</td>
+                <td>{{ leak.match }}</td>
+                <td>{{ leak.secret }}</td>
+                <td>{{ leak.commit }}</td>
+                <td>{{ leak.entropy }}</td>
+                <td>{{ leak.author }}</td>
+                <td>{{ leak.email }}</td>
+                <td>{{ leak.date }}</td>
+                <td>{{ leak.message }}</td>
+                <td>{{ leak.rule_id }}</td>
+                <td>{{ leak.fingerprint }}</td>
+            </tr>
+        </tbody>
+    </table>
+    {% endfor %}
+</section>

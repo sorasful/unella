@@ -1,5 +1,6 @@
 ### Python template
 
+results/
 report*
 report.html
 .idea/
