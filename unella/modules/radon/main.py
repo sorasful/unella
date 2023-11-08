@@ -1,8 +1,9 @@
 import json
 import re
+import shutil
 import subprocess
-from dataclasses import dataclass
 import typing as t
+from dataclasses import dataclass
 
 from unella.modules.generic import Report
 
@@ -25,6 +26,10 @@ class RadonReportData(t.TypedDict):
 @dataclass
 class RadonReport(Report):
     _data: RadonReportData | None = None
+
+    @property
+    def is_available(self) -> bool:
+        return bool(shutil.which("radon"))
 
     def perform_analysis(self) -> None:
         self._data = {}

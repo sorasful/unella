@@ -1,6 +1,7 @@
 import json
 import pathlib
 import re
+import shutil
 import subprocess
 import typing as t
 from dataclasses import dataclass
@@ -48,6 +49,10 @@ def convert_keys_to_snake_case(data: dict) -> dict:
 @dataclass
 class GitleaksReport(Report):
     _data: GitleaksReportData | None = None
+
+    @property
+    def is_available(self) -> bool:
+        return bool(shutil.which("gitleaks"))
 
     def perform_analysis(self) -> None:
         self._data = {}

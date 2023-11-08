@@ -1,4 +1,5 @@
 import re
+import shutil
 import subprocess
 from collections import Counter
 from dataclasses import dataclass
@@ -22,6 +23,10 @@ class MypyReport(Report):
     _most_messages_categories: list | None = None
     _most_messages: list | None = None
     _file_most_messages: list | None = None
+
+    @property
+    def is_available(self) -> bool:
+        return bool(shutil.which("mypy"))
 
     def perform_analysis(self) -> None:
         cmd = f"mypy {self.project_path} --strict"

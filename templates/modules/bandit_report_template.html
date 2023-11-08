@@ -1,0 +1,77 @@
+<h2>Bandit Security Report</h2>
+
+<section>
+    <h3>Report Summary</h3>
+    <p>Report generated at: {{ data.vulnerabilities.generated_at }}</p>
+    <p>Total number of files analyzed: {{ data.vulnerabilities.metrics|length }}</p>
+</section>
+
+<section>
+    <h3>Error Details</h3>
+    {% if data.vulnerabilities.errors %}
+        <ul>
+            {% for error in data.vulnerabilities.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No errors found.</p>
+    {% endif %}
+</section>
+
+<section>
+    <h3>Metrics Summary</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>File</th>
+                <th>LOC</th>
+                <th>High Confidence</th>
+                <th>Medium Confidence</th>
+                <th>Low Confidence</th>
+                <th>Undefined Confidence</th>
+                <th>High Severity</th>
+                <th>Medium Severity</th>
+                <th>Low Severity</th>
+                <th>Undefined Severity</th>
+                <th>NoSec</th>
+                <th>Skipped Tests</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file_path, metric in data.vulnerabilities.metrics.items() %}
+                <tr>
+                    <td>{{ file_path }}</td>
+                    <td>{{ metric.loc }}</td>
+                    <td>{{ metric.CONFIDENCE_HIGH }}</td>
+                    <td>{{ metric.CONFIDENCE_MEDIUM }}</td>
+                    <td>{{ metric.CONFIDENCE_LOW }}</td>
+                    <td>{{ metric.CONFIDENCE_UNDEFINED }}</td>
+                    <td>{{ metric.SEVERITY_HIGH }}</td>
+                    <td>{{ metric.SEVERITY_MEDIUM }}</td>
+                    <td>{{ metric.SEVERITY_LOW }}</td>
+                    <td>{{ metric.SEVERITY_UNDEFINED }}</td>
+                    <td>{{ metric.nosec }}</td>
+                    <td>{{ metric.skipped_tests }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h3>Detailed Findings</h3>
+    {% for result in data.vulnerabilities.results %}
+        <div>
+            <h4>Issue in File: {{ result.filename }} at line: {{ result.line_number }}</h4>
+            <p><strong>Issue Severity:</strong> {{ result.issue_severity }}</p>
+            <p><strong>Issue Confidence:</strong> {{ result.issue_confidence }}</p>
+            <p><strong>CWE ID:</strong> <a href="{{ result.issue_cwe.link }}">CWE-{{ result.issue_cwe.id }}</a></p>
+            <p><strong>Issue Description:</strong> {{ result.issue_text }}</p>
+            <p><strong>Code:</strong><pre>{{ result.code }}</pre></p>
+            <p><strong>More Info:</strong> <a href="{{ result.more_info }}">Click here</a></p>
+            <p><strong>Test ID:</strong> {{ result.test_id }}</p>
+            <p><strong>Test Name:</strong> {{ result.test_name }}</p>
+        </div>
+    {% endfor %}
+</section>

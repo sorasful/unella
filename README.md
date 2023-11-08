@@ -20,6 +20,7 @@ Mypy: https://github.com/python/mypy
 vulture: https://github.com/jendrikseipp/vulture
 Radon: https://github.com/rubik/radon
 Gitleaks: https://github.com/gitleaks/gitleaks
+Bandit: https://github.com/PyCQA/bandit
 
 ...and several other tools to fetch a plethora of information.
 

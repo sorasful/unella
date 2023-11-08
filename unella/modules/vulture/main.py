@@ -1,4 +1,5 @@
 import re
+import shutil
 import subprocess
 from dataclasses import dataclass
 
@@ -11,6 +12,10 @@ VULTURE_LINE_REGEX = r"(?P<file_path>.*):(?P<line>\d+): (?P<msg>.*)\((?P<confide
 class VultureReport(Report):
     _cmd_output: str | None = None
     _data: list[dict] | None = None
+
+    @property
+    def is_available(self) -> bool:
+        return bool(shutil.which("vulture"))
 
     def perform_analysis(self) -> None:
         cmd = f"vulture {self.project_path} --exclude venv "
@@ -35,7 +40,7 @@ class VultureReport(Report):
                     "line": line,
                     "msg": msg,
                     "confidence": confidence,
-                }
+                },
             )
 
         self._data = results

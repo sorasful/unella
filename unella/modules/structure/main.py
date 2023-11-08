@@ -93,6 +93,10 @@ class StructureReport(Report):
         self.project_path = pathlib.Path(project_to_audit)
         self._data: StructureReportData = {}
 
+    @property
+    def is_available(self) -> bool:
+        return True
+
     def perform_analysis(self) -> None:
         self._data["is_git_repository"] = self.check_is_git_repository()
         if self._data["is_git_repository"]:

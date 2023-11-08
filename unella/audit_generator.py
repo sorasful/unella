@@ -9,6 +9,7 @@ from loguru import logger
 from markdownify import markdownify as md
 
 from unella.cli import ProgressBar
+from unella.modules.bandit.main import BanditReport
 from unella.modules.generic import Report
 from unella.modules.gitleaks.main import GitleaksReport
 from unella.modules.mypy.main import MypyReport
@@ -32,12 +33,30 @@ class AuditGenerator:
             MypyReport,
             VultureReport,
             RadonReport,
+            BanditReport,
             GitleaksReport,
         ]
 
+    @property
+    def available_report_list(self) -> list[type[Report]]:
+        for report_class in [
+            StructureReport,
+            RuffReport,
+            MypyReport,
+            VultureReport,
+            RadonReport,
+            BanditReport,
+            GitleaksReport,
+        ]:
+            if report_class(str(self.project_path)).is_available:
+                yield report_class
+            else:
+                logger.warning(f"{report_class.__name__} is not available, skipping this one.")
+                continue
+
     def get_data(self) -> dict[str, Any]:
         results = {}
-        for report_class in self.report_list:
+        for report_class in self.available_report_list:
             report = report_class(str(self.project_path))
             try:
                 report.perform_analysis()
@@ -57,8 +76,9 @@ class AuditGenerator:
         template = env.get_template("main_template.html")
 
         reports_html = {}
-        progress_bar = ProgressBar(len(self.report_list))
-        for step, report_class in zip(progress_bar.start(), self.report_list):
+        available_report_list = list(self.available_report_list)
+        progress_bar = ProgressBar(len(available_report_list))
+        for step, report_class in zip(progress_bar.start(), available_report_list):
             report_name = pascal_case_to_snake_case(report_class.__name__)
             try:
                 reports_html[report_name] = report_class(str(self.project_path)).to_html()

@@ -1,4 +1,5 @@
 import json
+import shutil
 import subprocess
 from dataclasses import dataclass
 
@@ -9,6 +10,10 @@ from unella.modules.generic import Report
 class RuffReport(Report):
     _data: list[dict] | None = None
     _cmd_output: str | None = None
+
+    @property
+    def is_available(self) -> bool:
+        return bool(shutil.which("ruff"))
 
     def perform_analysis(self) -> None:
         cmd = f"ruff check {self.project_path} --select ALL --exit-zero --statistics --output-format json --silent"

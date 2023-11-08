@@ -3,7 +3,6 @@ import pathlib
 from dataclasses import dataclass, field
 
 from jinja2 import Environment, FileSystemLoader
-from markdownify import markdownify as md
 
 from unella.utils import pascal_case_to_snake_case
 
@@ -15,6 +14,15 @@ class Report(abc.ABC):
 
     def __post_init__(self) -> None:
         self.project_path = pathlib.Path(self.project_to_audit)
+
+    @property
+    @abc.abstractmethod
+    def is_available(self) -> bool:
+        """
+        A property to test if the report is valid int the current context or not.
+        For example if the commands are installed.
+        """
+        raise NotImplementedError
 
     @abc.abstractmethod
     def perform_analysis(self) -> None:
