@@ -6,7 +6,6 @@ from typing import Any
 
 from jinja2 import Environment, FileSystemLoader
 from loguru import logger
-from markdownify import markdownify as md
 
 from unella.cli import ProgressBar
 from unella.modules.bandit.main import BanditReport
@@ -71,17 +70,22 @@ class AuditGenerator:
     def get_json(self) -> str:
         return json.dumps(self.get_data())
 
-    def get_html(self) -> str:
-        env = Environment(loader=FileSystemLoader("templates"))
-        template = env.get_template("main_template.html")
+    def get_report(self, format: str = "html") -> str:
+        if format == "html":
+            env = Environment(loader=FileSystemLoader("html_templates"))
+            template = env.get_template("main_template.html")
+        else:
+            env = Environment(loader=FileSystemLoader("markdown_templates"))
+            template = env.get_template("main_template.md")
 
-        reports_html = {}
+        reports = {}
         available_report_list = list(self.available_report_list)
         progress_bar = ProgressBar(len(available_report_list))
         for step, report_class in zip(progress_bar.start(), available_report_list):
             report_name = pascal_case_to_snake_case(report_class.__name__)
             try:
-                reports_html[report_name] = report_class(str(self.project_path)).to_html()
+                report = report_class(str(self.project_path))
+                reports[report_name] = report.to_html() if format == "html" else report.to_markdown()
             except Exception as e:
                 logger.exception(f"Got an exception on module {report_name}, skipping this one")
                 continue
@@ -89,8 +93,10 @@ class AuditGenerator:
         formatted_now = now.strftime("%B %d, %Y %H:%M:%S")
         project_name = self.project_path.name
 
-        return template.render(reports=reports_html, audit_date=formatted_now, project_name=project_name)
+        return template.render(reports=reports, audit_date=formatted_now, project_name=project_name)
+
+    def get_html(self) -> str:
+        return self.get_report(format="html")
 
     def get_markdown(self) -> str:
-        html = self.get_html()
-        return md(html)
+        return self.get_report(format="markdown")

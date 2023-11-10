@@ -33,7 +33,13 @@ class Report(abc.ABC):
         raise NotImplementedError
 
     def to_html(self) -> str:
-        env = Environment(loader=FileSystemLoader("templates/modules"))
+        env = Environment(loader=FileSystemLoader("html_templates/modules"))
         template_name = f"{pascal_case_to_snake_case(self.__class__.__name__)}_template.html"
+        template = env.get_template(template_name)
+        return template.render(data=self.get_results())
+
+    def to_markdown(self) -> str:
+        env = Environment(loader=FileSystemLoader("markdown_templates/modules"))
+        template_name = f"{pascal_case_to_snake_case(self.__class__.__name__)}_template.md"
         template = env.get_template(template_name)
         return template.render(data=self.get_results())

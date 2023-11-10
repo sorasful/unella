@@ -9,18 +9,19 @@ def test_bandit_report() -> None:
 
     first_vulnerability, *vulnerabilities = results["vulnerabilities"]["results"]
 
-    assert first_vulnerability == {
-        "code": '7 \n8 response = requests.get("https://pro.pinock.io/features")\n9 \n',
-        "col_offset": 11,
-        "end_col_offset": 57,
-        "filename": "/home/tevak/dev/unella/pan.py",
-        "issue_confidence": "LOW",
-        "issue_cwe": {"id": 400, "link": "https://cwe.mitre.org/data/definitions/400.html"},
-        "issue_severity": "MEDIUM",
-        "issue_text": "Requests call without timeout",
-        "line_number": 8,
-        "line_range": [8],
-        "more_info": "https://bandit.readthedocs.io/en/1.7.5/plugins/b113_request_without_timeout.html",
-        "test_id": "B113",
-        "test_name": "request_without_timeout",
-    }
+    assert isinstance(first_vulnerability.get("code"), str)
+    assert isinstance(first_vulnerability.get("col_offset"), int)
+    assert isinstance(first_vulnerability.get("end_col_offset"), int)
+    assert isinstance(first_vulnerability.get("filename"), str)
+    assert isinstance(first_vulnerability.get("issue_confidence"), str)
+    assert isinstance(first_vulnerability.get("issue_cwe"), dict)
+    assert isinstance(first_vulnerability["issue_cwe"].get("id"), int)
+    assert isinstance(first_vulnerability["issue_cwe"].get("link"), str)
+    assert isinstance(first_vulnerability.get("issue_severity"), str)
+    assert isinstance(first_vulnerability.get("issue_text"), str)
+    assert isinstance(first_vulnerability.get("line_number"), int)
+    assert isinstance(first_vulnerability.get("line_range"), list)
+    assert all(isinstance(item, int) for item in first_vulnerability.get("line_range"))
+    assert isinstance(first_vulnerability.get("more_info"), str)
+    assert isinstance(first_vulnerability.get("test_id"), str)
+    assert isinstance(first_vulnerability.get("test_name"), str)

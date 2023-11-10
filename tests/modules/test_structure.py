@@ -32,7 +32,7 @@ def test_structure_report(get_coverage_mock) -> None:
                 "rev": "v2.4.0",
                 "hooks": [
                     {"id": "check-ast"},
-                    {"id": "trailing-whitespace"},
+                    {"id": "trailing-whitespace", "args": ["--markdown-linebreak-ext=md"]},
                     {"id": "check-toml"},
                     {"id": "end-of-file-fixer"},
                 ],
