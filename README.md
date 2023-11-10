@@ -1,6 +1,10 @@
 # Unella: Automatic Audit for Python Projects
 Unella is a project to automate audits exclusively on Python projects.
 
+
+![Unella cli example](./docs/cli.gif)
+
+
 ## 🚧 Project Status
 Please note that Unella is currently in active development.  
 While it is functional, expect regular updates and enhancements.  
